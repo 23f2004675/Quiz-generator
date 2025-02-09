@@ -12,6 +12,5 @@ class LocalDevelopmentConfig(Config):
     SECRET_KEY = "hello this is secret"
     SECURITY_TOKEN_AUTHENTICATION_HEADER='Authentication-token'
 
-
     WTF_CSRF_ENABLED= False
 

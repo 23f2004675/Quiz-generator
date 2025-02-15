@@ -1,17 +1,41 @@
 from flask import Flask
+from flask_security import Security, SQLAlchemyUserDatastore, auth_required
+from flask_restful import Api
+
 from backend.app.config import LocalDevelopmentConfig
-from backend.app.models import db
+from backend.app.models import db, User, Role
 
-def createapp():
-    app = Flask(__name__,template_folder='frontend',static_folder='frontend',static_url_path='/static')
+def createApp():
+    app =  Flask(__name__, template_folder='frontend', static_folder='frontend', static_url_path='/static')
     app.config.from_object(LocalDevelopmentConfig)
+
     db.init_app(app)
+    api=Api(app)
+
+    datastore=SQLAlchemyUserDatastore(db, User, Role)
+    app.security=Security(app, datastore, register_blueprint=False)
+
     app.app_context().push()
-    return app
+    return app,api
 
-app = createapp()
+app,api = createApp()
 
-import backend.app.routes
+#import backend.Createdata
 
-if __name__ == '__main__':
+import backend.app.routes 
+from backend.api.subjects import SubjectsAPI
+from backend.api.chapters import ChapterAPI
+from backend.api.quiz import get_quizzes_today_or_future
+from backend.api.score import get_scores
+from backend.api.questions import get_questions
+
+
+api.add_resource(SubjectsAPI,'/api/subjects')
+api.add_resource(get_quizzes_today_or_future, '/api/quizzes/today_or_future')
+api.add_resource(get_scores,'/api/score/<int:user_id>')
+api.add_resource(get_questions,'/api/quiz/<int:quiz_id>')
+api.add_resource(ChapterAPI, '/api/chapters')
+
+
+if (__name__=='__main__'):
     app.run()

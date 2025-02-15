@@ -34,7 +34,7 @@ api.add_resource(SubjectsAPI,'/api/subjects')
 api.add_resource(get_quizzes_today_or_future, '/api/quizzes/today_or_future')
 api.add_resource(get_scores,'/api/score/<int:user_id>')
 api.add_resource(get_questions,'/api/quiz/<int:quiz_id>')
-api.add_resource(ChapterAPI, '/api/chapters')
+api.add_resource(ChapterAPI, '/api/chapters', '/api/chapters/<int:chapter_id>')
 
 
 if (__name__=='__main__'):

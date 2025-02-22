@@ -1,12 +1,43 @@
 export default {
   template: `
-        <div>
-        <h1>Login Page </h1>
-        <input type="email" placeholder="email" v-model="email"/>
-        <input type="password" placeholder="password" v-model="password"/>
-        <button @click=submitLogin> Login </button>
-        <a href="/#/Register">Create new User?</a>
-        </div>
+  <div class="container mt-5">
+    <h1 class="text-center">Login Page</h1>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+            <form @submit.prevent="submitLogin" class="mt-4">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        placeholder="Enter your email"
+                        v-model="email"
+                        required
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        v-model="password"
+                        required
+                    />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">
+                    Login
+                </button>
+            </form>
+
+            <p class="text-center mt-3">
+                Don't have an account? <a href="/#/Register">Create new User</a>
+            </p>
+          </div>
+       </div>
+    </div>
         `,
   data() {
     return {

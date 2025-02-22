@@ -4,6 +4,7 @@ import RegisterPage from "../pages/RegisterPage.js";
 import Admin_dashboard from "../pages/Admin/Admin_dashboard.js";
 import Admin_quiz from "../pages/Admin/Admin_quiz.js";
 import Admin_summary from "../pages/Admin/Admin_summary.js";
+import Admin_user from "../pages/Admin/Admin_user.js";
 
 import User_dashboard from "../pages/User/User_dashboard.js";
 import Scores from "../pages/User/Scores.js";
@@ -13,11 +14,23 @@ import User_summary from "../pages/User/User_summary.js";
 import store from "./store.js";
 
 const About = {
-  template: `<h1>This is About us</h1>`,
+  template: `
+  <div class="container mt-5">
+    <h2>About Us</h2>
+    <p>
+      This is a quiz generator application that allows users to create and manage quizzes efficiently.
+    </p>
+  </div>
+  `,
 };
 
 const Home = {
-  template: `<h1>This is Home</h1>`,
+  template: `
+  <div class="container text-center mt-5">
+    <h1>Welcome to the Quiz Generator</h1>
+    <p>Generate, edit, and manage quizzes with ease.</p>
+  </div>
+  `,
 };
 
 const routes = [
@@ -54,6 +67,11 @@ const routes = [
   {
     path: "/admin/quiz",
     component: Admin_quiz,
+    meta: { requiresLogin: true, role: "admin" },
+  },
+  {
+    path: "/admin/user",
+    component: Admin_user,
     meta: { requiresLogin: true, role: "admin" },
   },
   {

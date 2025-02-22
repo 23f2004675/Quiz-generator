@@ -1,4 +1,5 @@
-from flask import jsonify
+from flask import jsonify, request
+from ..app.models import db, Subject
 from flask_restful import Resource, fields, marshal_with
 from flask_security import auth_required
 from ..app.models import Subject
@@ -35,4 +36,51 @@ class SubjectsAPI(Resource):
         if not result:
             return {"message":"no Chapter found"},404                    
         return result
+
+    @auth_required('token')
+    def post(self):
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        if not name or not description:
+            return {"message": "Name and description are required"}, 400
+
+        subject = Subject(name=name, description=description)
+        db.session.add(subject)
+        db.session.commit()
+
+        return {"message": "Subject created successfully"}, 201
+
+    @auth_required('token')
+    def delete(self, subject_id):
+        subject = Subject.query.get(subject_id)
+
+        if not subject:
+            return {"message": "Subject not found"}, 404
+
+        db.session.delete(subject)
+        db.session.commit()
+        return {"message": "Subject deleted successfully"}, 200
+
+    @auth_required('token')
+    def put(self, subject_id):
+        subject = Subject.query.get(subject_id)
+
+        if not subject:
+            return {"message": "Subject not found"}, 404
+
+        data = request.get_json()
+        new_name = data.get("name")
+        new_description = data.get("description")
+
+        if not new_name or not new_description:
+            return {"message": "Both name and description are required"}, 400
+
+        subject.name = new_name
+        subject.description = new_description
+
+        db.session.commit()
+        return {"message": "Subject updated successfully"}, 200
+
 

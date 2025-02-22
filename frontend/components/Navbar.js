@@ -1,28 +1,70 @@
 export default {
   template: `
-      <div>
-          <router-link to='/'>Home</router-link>
-          <router-link v-if="!$store.state.loggedIn" to='/About_us'>About us</router-link>
-          <router-link v-if="!$store.state.loggedIn" to='/Login'>Login</router-link>
-          <router-link v-if="!$store.state.loggedIn" to='/Register'>Register</router-link>
-  
-          <router-link v-if="$store.state.loggedIn && $store.state.role=='admin' " to='/admin/dashboard'>Dashboard</router-link>
-          <router-link v-if="$store.state.loggedIn && $store.state.role=='admin' " to='/admin/quiz'>Quiz</router-link>
-          <router-link v-if="$store.state.loggedIn && $store.state.role=='admin' " to='/admin/summary'>Summary</router-link>
-          <input v-if="$store.state.loggedIn && $store.state.role=='admin' " type="text" placeholder="Search" /> 
-          <p v-if="$store.state.loggedIn && $store.state.role=='admin' ">Welcome Admin</p>
-  
-          <router-link v-if="$store.state.loggedIn && $store.state.role=='user' " to='/user/dashboard'>Dashboard</router-link>
-          <router-link v-if="$store.state.loggedIn && $store.state.role=='user' " to='/user/scores'>Scores</router-link>
-          <router-link v-if="$store.state.loggedIn && $store.state.role=='user' " to='user/summary'>Summary</router-link>
-          <input v-if="$store.state.loggedIn && $store.state.role=='user' " type="text" placeholder="Search" /> 
-          <p v-if="$store.state.loggedIn && $store.state.role=='user' ">Welcome User</p>
-  
-          <button v-if="$store.state.loggedIn" class="btn btn-secondary" @click="handleLogout">Logout</button>
-          
-          
+    <nav class="navbar navbar-expand-lg"  style="background-color: #4e5283; padding: 24px;">
+      <div class="container">
+        <router-link to='/' class="navbar-brand text-warning f-2">Home</router-link>
+        
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li v-if="!$store.state.loggedIn" class="nav-item">
+              <router-link to='/About_us' class="nav-link text-light">About Us</router-link>
+            </li>
+            <li v-if="!$store.state.loggedIn" class="nav-item">
+              <router-link to='/Login' class="nav-link text-light">Login</router-link>
+            </li>
+            <li v-if="!$store.state.loggedIn" class="nav-item">
+              <router-link to='/Register' class="nav-link text-light">Register</router-link>
+            </li>
+
+            <!-- Admin Navigation -->
+            <template v-if="$store.state.loggedIn && $store.state.role=='admin'">
+              <li class="nav-item">
+                <router-link to='/admin/dashboard' class="nav-link text-warning">Dashboard</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to='/admin/quiz' class="nav-link text-warning">Quiz</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to='/admin/user' class="nav-link text-warning">Users</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to='/admin/summary' class="nav-link text-warning">Summary</router-link>
+              </li>
+              <li class="nav-item">
+                <input type="text" class="form-control mr-3" placeholder="Search" style="background-color: #d9bbf9; border: none; color: #36392a;" />
+              </li>
+              <li class="nav-item">
+                <p class="nav-link text-light">Welcome Admin</p>
+              </li>
+            </template>
+
+            <!-- User Navigation -->
+            <template v-if="$store.state.loggedIn && $store.state.role=='user'">
+              <li class="nav-item">
+                <router-link to='/user/dashboard' class="nav-link text-info">Dashboard</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to='/user/scores' class="nav-link text-info">Scores</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to='/user/summary' class="nav-link text-info">Summary</router-link>
+              </li>
+              <li class="nav-item">
+                <input type="text" class="form-control mr-3" placeholder="Search" style="background-color: #d9bbf9; border: none; color: #36392a;" />
+              </li>
+              <li class="nav-item">
+                <p class="nav-link text-light">Welcome User</p>
+              </li>
+            </template>
+
+            <li v-if="$store.state.loggedIn" class="nav-item">
+              <button class="btn btn-danger ml-2" @click="handleLogout">Logout</button>
+            </li>
+          </ul>
+        </div>
       </div>
-      `,
+    </nav>
+  `,
   methods: {
     handleLogout() {
       this.$store.commit("logout");

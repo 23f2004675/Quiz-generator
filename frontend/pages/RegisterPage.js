@@ -1,15 +1,81 @@
 export default {
   template: `
-        <div>
-        <h1>Register Page </h1>
-        <input type="email" placeholder="email" v-model="email"/>
-        <input type="password" placeholder="password" v-model="password"/>
-        <input type="text" placeholder="Full name" v-model="fullname"/>
-        <input type="text" placeholder="Qualification" v-model="qualification"/>
-        <input type="date" placeholder="Date of birth?" v-model="dob"/>
-        <button @click=submitLogin> Register </button>
-        <a href="/#/Login">Existing user?</a>
-        </div>
+  <div class="container mt-5">
+  <h1 class="text-center">Register Page</h1>
+  <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-4">
+          <form @submit.prevent="submitRegister" class="mt-4">
+              <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input
+                      type="email"
+                      id="email"
+                      class="form-control"
+                      placeholder="Enter your email"
+                      v-model="email"
+                      required
+                  />
+              </div>
+
+              <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      placeholder="Enter your password"
+                      v-model="password"
+                      required
+                  />
+              </div>
+
+              <div class="form-group">
+                  <label for="fullname">Full Name</label>
+                  <input
+                      type="text"
+                      id="fullname"
+                      class="form-control"
+                      placeholder="Enter your full name"
+                      v-model="fullname"
+                      required
+                  />
+              </div>
+
+              <div class="form-group">
+                  <label for="qualification">Qualification</label>
+                  <input
+                      type="text"
+                      id="qualification"
+                      class="form-control"
+                      placeholder="Enter your qualification"
+                      v-model="qualification"
+                      required
+                  />
+              </div>
+
+              <div class="form-group">
+                  <label for="dob">Date of Birth</label>
+                  <input
+                      type="date"
+                      id="dob"
+                      class="form-control"
+                      v-model="dob"
+                      required
+                  />
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block mt-4">
+                  Register
+              </button>
+          </form>
+
+          <p class="text-center mt-3">
+              Already have an account? <a href="/#/Login">Login</a>
+          </p>
+      </div>
+  </div>
+</div>
+
         `,
   data() {
     return {

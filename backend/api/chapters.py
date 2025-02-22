@@ -7,6 +7,8 @@ question_fields = {
     'id': fields.Integer,
     'question_text': fields.String,
     'question_title': fields.String,
+    'options': fields.String,
+    'correct_option': fields.String,
 }
 
 quiz_chapter_fields = {
@@ -14,6 +16,8 @@ quiz_chapter_fields = {
     'chapter_id': fields.Integer,
     'chapter_name': fields.String,
     'questions': fields.List(fields.Nested(question_fields)),
+    'time_duration': fields.String,
+    'remarks': fields.String,
 }
 
 class ChapterAPI(Resource):
@@ -31,17 +35,21 @@ class ChapterAPI(Resource):
             quiz_data = {
                 'id': quiz.id,
                 'chapter_id': quiz.chapter_id,
-                'chapter_name': quiz.chapter.name,
+                'time_duration': quiz.time_duration,
+                'remarks': quiz.remarks,
+                'chapter_name': quiz.chapter.name if quiz.chapter else None,
                 'questions': [
                     {
                         'id': question.id,
                         'question_text': question.question_text,
                         'question_title': question.question_title,
+                        'options': question.options,
+                        'correct_option': question.correct_option,
                     } for question in quiz.questions
                 ],
             }
             quiz_data_list.append(quiz_data)
-        
+        # print(quiz_data_list)
         return quiz_data_list
 
     @auth_required('token')

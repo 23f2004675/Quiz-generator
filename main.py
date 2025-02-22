@@ -25,17 +25,24 @@ app,api = createApp()
 import backend.app.routes 
 from backend.api.subjects import SubjectsAPI
 from backend.api.chapters import ChapterAPI
-from backend.api.quiz import get_quizzes_today_or_future
+from backend.api.quiz import QuizAPI, QuizNewAPI
 from backend.api.score import get_scores
-from backend.api.questions import get_questions
+from backend.api.questions import QuestionAPI
+from backend.api.users import UserAPI, StatusAPI
 
-
-api.add_resource(SubjectsAPI,'/api/subjects')
-api.add_resource(get_quizzes_today_or_future, '/api/quizzes/today_or_future')
-api.add_resource(get_scores,'/api/score/<int:user_id>')
-api.add_resource(get_questions,'/api/quiz/<int:quiz_id>')
+api.add_resource(SubjectsAPI,'/api/subjects', "/api/subjects/<int:subject_id>")
 api.add_resource(ChapterAPI, '/api/chapters', '/api/chapters/<int:chapter_id>')
 
+api.add_resource(QuizAPI, '/api/quizzes/today_or_future', '/api/quizzes', '/api/quizzes/<int:quiz_id>')
+
+api.add_resource(get_scores,'/api/score/<int:user_id>')
+api.add_resource(QuestionAPI,'/api/quiz/<int:quiz_id>', '/api/quizzes/<int:quiz_id>/questions', '/api/questions/<int:question_id>')
+
+api.add_resource(QuizNewAPI, '/api/quiz/<int:quiz_id>/details')
+
+api.add_resource(UserAPI, '/api/users', '/api/users/<int:user_id>')
+
+api.add_resource(StatusAPI,'/api/users/<int:user_id>/status')
 
 if (__name__=='__main__'):
     app.run()

@@ -13,8 +13,8 @@ export default {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="score in scores" :key="score.id">
-        <td>{{ score.id }}</td>
+      <tr v-for="(score,index) in scores" :key="score.id">
+        <td>{{ index+1 }}</td>
         <td>{{ score.quiz_name }}</td>
         <td>{{ score.no_of_questions }}</td>
         <td>{{ formatDate(score.timestamp) }}</td>
@@ -35,7 +35,7 @@ export default {
       const day = String(date.getDate()).padStart(2, "0");
       const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
       const year = date.getFullYear();
-      return `${day}/${month}/${year}`; // Custom format: DD/MM/YYYY
+      return `${day}/${month}/${year}`;
     },
   },
   async mounted() {

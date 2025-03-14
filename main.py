@@ -29,6 +29,7 @@ from backend.api.quiz import QuizAPI, QuizNewAPI
 from backend.api.score import get_scores
 from backend.api.questions import QuestionAPI
 from backend.api.users import UserAPI, StatusAPI
+from backend.api.summary import MakeChart
 
 api.add_resource(SubjectsAPI,'/api/subjects', "/api/subjects/<int:subject_id>")
 api.add_resource(ChapterAPI, '/api/chapters', '/api/chapters/<int:chapter_id>')
@@ -43,6 +44,8 @@ api.add_resource(QuizNewAPI, '/api/quiz/<int:quiz_id>/details')
 api.add_resource(UserAPI, '/api/users', '/api/users/<int:user_id>')
 
 api.add_resource(StatusAPI,'/api/users/<int:user_id>/status')
+
+api.add_resource(MakeChart, '/api/chart/<int:user_id>')
 
 if (__name__=='__main__'):
     app.run()

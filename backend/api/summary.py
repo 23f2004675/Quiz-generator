@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import calendar
 import os
@@ -10,11 +12,13 @@ class MakeChart(Resource):
 
     @auth_required('token')
     def get(self, user_id):
-    
-        os.makedirs('static/Images', exist_ok=True)
+        # Create the directory if it doesn't exist
+        os.makedirs('frontend/assets/Images', exist_ok=True)
+
+        # Define the paths for the charts
         chart_urls = {
-            'bar_chart_url': 'static/Images/quiz_by_subject.jpg',
-            'pie_chart_url': 'static/Images/quizzes_by_month.jpg'
+            'bar_chart_url': 'frontend/assets/Images/quiz_by_subject.jpg',
+            'pie_chart_url': 'frontend/assets/Images/quizzes_by_month.jpg'
         }
 
         # Bar Chart: Number of quizzes per subject
@@ -53,4 +57,5 @@ class MakeChart(Resource):
         plt.savefig(chart_urls['pie_chart_url'])
         plt.close()
 
+        # Return the URLs of the generated charts
         return jsonify(chart_urls)

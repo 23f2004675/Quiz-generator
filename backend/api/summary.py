@@ -6,7 +6,7 @@ import os
 from flask import jsonify, send_file
 from flask_restful import Resource
 from flask_security import auth_required
-from ..app.models import Quiz, Subject, Score
+from ..app.models import Quiz, Subject, Score,db,Chapter
 
 class MakeChart(Resource):
 
@@ -55,6 +55,74 @@ class MakeChart(Resource):
         plt.title("Quizzes Attempted by Month")
         plt.tight_layout()
         plt.savefig(chart_urls['pie_chart_url'])
+        plt.close()
+
+        # Return the URLs of the generated charts
+        return jsonify(chart_urls)
+
+class AdminSummaryCharts(Resource):
+    @auth_required('token')
+    # @roles_required('admin')  # Ensure only admins can access this endpoint
+    def get(self):
+        # Create the directory if it doesn't exist
+        os.makedirs('frontend/assets/Images', exist_ok=True)
+
+        # Define the paths for the charts
+        chart_urls = {
+            'top_scores_chart_url': 'frontend/assets/Images/admin_top_scores.jpg',
+            'user_attempts_chart_url': 'frontend/assets/Images/admin_user_attempts.jpg',
+        }
+
+        # Fetch subject-wise top scores
+        subject_top_scores = (
+            db.session.query(
+                Chapter.name,
+                db.func.max(Score.score).label('top_score')
+            )
+            .join(Quiz, Score.quiz_id == Quiz.id)
+            .join(Chapter, Quiz.chapter_id == Chapter.id)
+            .group_by(Chapter.name)
+            .all()
+        )
+
+        # Generate Top Scores Chart
+        subjects = [row[0] for row in subject_top_scores]
+        top_scores = [row[1] for row in subject_top_scores]
+
+        plt.figure(figsize=(10, 6))
+        plt.bar(subjects, top_scores, color='skyblue')
+        plt.title("Subject-wise Top Scores")
+        plt.xlabel("Subjects")
+        plt.ylabel("Top Score")
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+        plt.savefig(chart_urls['top_scores_chart_url'])
+        plt.close()
+
+        # Fetch subject-wise user attempts
+        subject_user_attempts = (
+            db.session.query(
+                Chapter.name,
+                db.func.count(Score.id).label('user_attempts')
+            )
+            .join(Quiz, Score.quiz_id == Quiz.id)
+            .join(Chapter, Quiz.chapter_id == Chapter.id)
+            .group_by(Chapter.name)
+            .all()
+        )
+
+        # Generate User Attempts Chart
+        subjects = [row[0] for row in subject_user_attempts]
+        user_attempts = [row[1] for row in subject_user_attempts]
+
+        plt.figure(figsize=(10, 6))
+        plt.bar(subjects, user_attempts, color='orange')
+        plt.title("Subject-wise User Attempts")
+        plt.xlabel("Subjects")
+        plt.ylabel("Number of Attempts")
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+        plt.savefig(chart_urls['user_attempts_chart_url'])
         plt.close()
 
         # Return the URLs of the generated charts

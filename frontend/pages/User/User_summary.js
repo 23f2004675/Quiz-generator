@@ -31,8 +31,8 @@ export default {
   },
   methods: {
     getFullUrl(relativeUrl) {
-      const cleanUrl = relativeUrl.replace(/^frontend\/assets\//, "");
-      return `${location.origin}/static/assets/${cleanUrl}`;
+      const cleanUrl = relativeUrl.replace(/^frontend\//, "");
+      return `${location.origin}/static/${cleanUrl}`;
     },
   },
   async mounted() {

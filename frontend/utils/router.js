@@ -8,7 +8,7 @@ import Admin_user from "../pages/Admin/Admin_user.js";
 
 import User_dashboard from "../pages/User/User_dashboard.js";
 import Scores from "../pages/User/Scores.js";
-import Quiz from "../pages/User/Quiz.js";
+import StartQuiz from "../pages/User/StartQuiz.js";
 import User_summary from "../pages/User/User_summary.js";
 
 import store from "./store.js";
@@ -50,7 +50,7 @@ const routes = [
   },
   {
     path: "/Quiz/:quiz_id",
-    component: Quiz,
+    component: StartQuiz,
     props: true,
     meta: { requiresLogin: true },
   },

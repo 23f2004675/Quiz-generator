@@ -16,7 +16,7 @@ export default {
             <thead>
               <tr>
                 <th>Chapter Name</th>
-                <th>No. of Questions</th>
+                <th>Question Title</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -399,7 +399,7 @@ export default {
         );
 
         if (res.ok) {
-          alert("Question added successfully!");
+          alert("Question edited successfully!");
           await this.fetchQuizzes(); // Refresh the list
         } else {
           alert("Failed to edit question");

@@ -123,5 +123,5 @@ class QuizNewAPI(Resource):
             "time_duration": quiz.time_duration,
             "remarks": quiz.remarks
         }
-        print(response)
+        # print(response)
         return response, 200

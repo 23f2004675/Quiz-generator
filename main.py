@@ -35,7 +35,7 @@ api.add_resource(ChapterAPI, '/api/chapters', '/api/chapters/<int:chapter_id>')
 
 api.add_resource(QuizAPI, '/api/quizzes/today_or_future', '/api/quizzes', '/api/quizzes/<int:quiz_id>')
 
-api.add_resource(get_scores,'/api/score/<int:user_id>')
+api.add_resource(get_scores,'/api/score/<int:user_id>', '/api/score')
 api.add_resource(QuestionAPI,'/api/quiz/<int:quiz_id>', '/api/quizzes/<int:quiz_id>/questions', '/api/questions/<int:question_id>')
 
 api.add_resource(QuizNewAPI, '/api/quiz/<int:quiz_id>/details')

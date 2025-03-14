@@ -14,6 +14,7 @@ question_fields = {
 quiz_fields = {
     'id': fields.Integer,
     'time_duration': fields.String,
+    'remarks': fields.String,
     'questions': fields.List(fields.Nested(question_fields)),
 }
 
@@ -75,3 +76,19 @@ class QuestionAPI(Resource):
         db.session.delete(question)
         db.session.commit()
         return {"message": "Question deleted successfully"}, 200
+
+# class StartQuizAPI(Resource):
+
+#     @marshal_with(question_fields)
+#     @auth_required('token')
+#     def get(self, quiz_id):
+#         quiz = Quiz.query.filter_by(id=quiz_id).first()
+#         if not quiz:
+#             return {"message": "Quiz not found"}, 404
+
+#         questions = Question.query.filter_by(quiz_id=quiz.id).all()
+#         if not questions:
+#             return {"message": "No questions found for this quiz"}, 404
+
+#         quiz.questions = questions
+#         return quiz, 200    

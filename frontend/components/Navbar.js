@@ -41,19 +41,19 @@ export default {
             <!-- User Navigation -->
             <template v-if="$store.state.loggedIn && $store.state.role=='user'">
               <li class="nav-item">
-                <router-link to='/user/dashboard' class="nav-link text-info">Dashboard</router-link>
+                <router-link to='/user/dashboard' class="nav-link text-warning">Dashboard</router-link>
               </li>
               <li class="nav-item">
-                <router-link to='/user/scores' class="nav-link text-info">Scores</router-link>
+                <router-link to='/user/scores' class="nav-link text-warning">Scores</router-link>
               </li>
               <li class="nav-item">
-                <router-link to='/user/summary' class="nav-link text-info">Summary</router-link>
+                <router-link to='/user/summary' class="nav-link text-warning">Summary</router-link>
               </li>
               <li class="nav-item">
                 <input type="text" class="form-control mr-3" placeholder="Search" style="background-color: #d9bbf9; border: none; color: #36392a;" />
               </li>
               <li class="nav-item">
-                <p class="nav-link text-light">Welcome User</p>
+                <p class="nav-link text-light">Welcome {{$store.state.fullname}}</p>
               </li>
             </template>
 

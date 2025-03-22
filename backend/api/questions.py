@@ -2,7 +2,10 @@ from flask_restful import Resource, fields, marshal_with
 from flask_security import auth_required
 from ..app.models import db, Quiz, Question
 from flask import request
-
+from flask import current_app as app
+cache=app.cache
+# @cache.cached(timeout=5)
+# @cache.memoize(timeout=5)
 
 question_fields = {
     'id': fields.Integer,
@@ -31,6 +34,7 @@ class QuestionAPI(Resource):
 
     @marshal_with(quiz_fields)
     @auth_required('token')
+    @cache.memoize(timeout=5)
     def get(self, quiz_id):
         
         quiz = Quiz.query.filter_by(id=quiz_id).first()
@@ -90,6 +94,7 @@ class QAPI(Resource):
 
     @marshal_with(all_questions_fields)
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
 
         questions = Question.query.all()

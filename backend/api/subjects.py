@@ -3,7 +3,10 @@ from ..app.models import db, Subject
 from flask_restful import Resource, fields, marshal_with
 from flask_security import auth_required
 from ..app.models import Subject
-
+from flask import current_app as app
+cache=app.cache
+# @cache.cached(timeout=5)
+# @cache.memoize(timeout=5)
 chapter_fields = {
     'id': fields.Integer,
     'name': fields.String,
@@ -22,6 +25,7 @@ class SubjectsAPI(Resource):
 
     @marshal_with(subject_fields)
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
         subjects = Subject.query.all()
         result = []

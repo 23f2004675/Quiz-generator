@@ -3,6 +3,10 @@ from flask_security import auth_required
 from ..app.models import db, Quiz, Question, Chapter, Subject
 from flask import request,  jsonify
 from datetime import datetime
+from flask import current_app as app
+cache=app.cache
+# @cache.cached(timeout=5)
+# @cache.memoize(timeout=5)
 
 quizzes_fields={
     'id' : fields.Integer,
@@ -19,6 +23,7 @@ class QuizAPI(Resource):
 
     @marshal_with(quizzes_fields)
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
         # today = datetime.today().date()
         # Quizzes=Quiz.query.filter(Quiz.date_of_quiz >= today).all()

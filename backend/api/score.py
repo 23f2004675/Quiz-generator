@@ -4,6 +4,10 @@ from flask_security import auth_required
 from ..app.models import Score,db, Quiz, Chapter 
 
 from datetime import datetime
+from flask import current_app as app
+cache=app.cache
+# @cache.cached(timeout=5)
+# @cache.memoize(timeout=5)
 
 score_fields={
     'id' : fields.Integer,
@@ -19,6 +23,7 @@ class get_scores(Resource):
 
     @marshal_with(score_fields)
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self,user_id):
         Scores =(db.session.query(Score, Quiz, Chapter)
         .join(Quiz, Score.quiz_id == Quiz.id)

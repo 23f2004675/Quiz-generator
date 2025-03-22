@@ -3,8 +3,8 @@ from flask_restful import Resource, fields, marshal_with
 from flask_security import auth_required
 from ..app.models import db, Quiz, Subject, Chapter
 
-# from flask import current_app as app
-# cache=app.cache
+from flask import current_app as app
+cache=app.cache
 # @cache.cached(timeout=5)
 # @cache.memoize(timeout=5)
 
@@ -27,9 +27,9 @@ quiz_chapter_fields = {
 }
 
 class ChapterAPI(Resource):
-
-    @marshal_with(quiz_chapter_fields)
     @auth_required('token')
+    @marshal_with(quiz_chapter_fields)
+    @cache.cached(timeout=5)
     def get(self):
         quizzes = Quiz.query.all()
         

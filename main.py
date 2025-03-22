@@ -1,25 +1,38 @@
 from flask import Flask
 from flask_security import Security, SQLAlchemyUserDatastore, auth_required
 from flask_restful import Api
+from flask_caching import Cache
 
 from backend.app.config import LocalDevelopmentConfig
 from backend.app.models import db, User, Role
+
+from backend.tasks.celery import celery_init_app
 
 def createApp():
     app =  Flask(__name__, template_folder='frontend', static_folder='frontend', static_url_path='/static')
     app.config.from_object(LocalDevelopmentConfig)
 
     db.init_app(app)
-    api=Api(app)
+    
+
+    cache = Cache(app)
 
     datastore=SQLAlchemyUserDatastore(db, User, Role)
     app.security=Security(app, datastore, register_blueprint=False)
-
+    app.cache = cache
+    
     app.app_context().push()
+
+    # from backend.app.api import *
+    api=Api(app)
+    
     return app,api
 
 app,api = createApp()
 
+celery_app = celery_init_app(app)
+
+import backend.tasks.celery_schedule
 #import backend.Createdata
 
 import backend.app.routes 

@@ -1,22 +1,45 @@
 from flask import current_app as app, jsonify, render_template, request
 from flask_security import auth_required, SQLAlchemyUserDatastore, verify_password, hash_password
-from .models import db,Chapter
+from .models import db,Chapter,User,Score
 
 from datetime import datetime
 
 datastore:SQLAlchemyUserDatastore = app.security.datastore
+cache=app.cache
+
+# from ..tasks.tasks import add
+
+from datetime import datetime, timedelta
+today = datetime.today()
+first_day_of_current_month = today.replace(day=1)
+last_day_of_current_month = today.replace(day=1, month=today.month+1) - timedelta(days=1)
+@app.get('/celery')
+def celery():
+    print('toda',today)
+  
+    user = User.query.filter_by(email="vaibhavsonisatya1@gmail.com").first()
+    if not user:
+        raise ValueError(f"User with email {to} not found")
+    print('user',user.fullname)
+    scores = Score.query.filter(
+        Score.user_id == user.id,
+        Score.timestamp >= first_day_of_current_month,
+        Score.timestamp <= last_day_of_current_month
+    ).all()
+    print('scores',scores)
+
+    return "Hello",200
+
 
 @app.get('/')
 def home():
     return render_template('index.html')
 
-@app.route('/protected', methods=['GET'])
-#@auth_required('token')
-def protected():
-    All_chap=Chapter.query.all()
-    for i in All_chap:
-        print(f"id={i.id}+name={i.name}+description={i.description}")
-    return '<h1>Accessed</h1>'
+# from flask import current_app as app
+# cache=app.cache
+# @cache.cached(timeout=5)
+# @cache.memoize(timeout=5)
+
 
 @app.route('/login', methods=['POST'])
 def login():

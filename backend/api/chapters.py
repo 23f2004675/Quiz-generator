@@ -3,6 +3,12 @@ from flask_restful import Resource, fields, marshal_with
 from flask_security import auth_required
 from ..app.models import db, Quiz, Subject, Chapter
 
+# from flask import current_app as app
+# cache=app.cache
+# @cache.cached(timeout=5)
+# @cache.memoize(timeout=5)
+
+
 question_fields = {
     'id': fields.Integer,
     'question_text': fields.String,

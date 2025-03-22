@@ -18,6 +18,15 @@ quiz_fields = {
     'questions': fields.List(fields.Nested(question_fields)),
 }
 
+all_questions_fields = {
+    'id': fields.Integer,
+    'quiz_id': fields.Integer,
+    'question_text': fields.String,
+    'options': fields.String, 
+    'correct_option': fields.String,
+    'question_title': fields.String,
+}
+
 class QuestionAPI(Resource):
 
     @marshal_with(quiz_fields)
@@ -77,18 +86,13 @@ class QuestionAPI(Resource):
         db.session.commit()
         return {"message": "Question deleted successfully"}, 200
 
-# class StartQuizAPI(Resource):
+class QAPI(Resource):
 
-#     @marshal_with(question_fields)
-#     @auth_required('token')
-#     def get(self, quiz_id):
-#         quiz = Quiz.query.filter_by(id=quiz_id).first()
-#         if not quiz:
-#             return {"message": "Quiz not found"}, 404
+    @marshal_with(all_questions_fields)
+    @auth_required('token')
+    def get(self):
 
-#         questions = Question.query.filter_by(quiz_id=quiz.id).all()
-#         if not questions:
-#             return {"message": "No questions found for this quiz"}, 404
-
-#         quiz.questions = questions
-#         return quiz, 200    
+        questions = Question.query.all()
+        if not questions:
+            return {"message": "No questions found "}, 404
+        return questions, 200

@@ -6,6 +6,8 @@ export default {
     <thead class="thead-dark">
       <tr>
         <th scope="col">ID</th>
+        <th scope="col">Subject  name</th>
+        <th scope="col">Chapter name</th>
         <th scope="col">No. of Questions</th>
         <th scope="col">Date</th>
         <th scope="col">Duration (hh:mm)</th>
@@ -16,12 +18,16 @@ export default {
     <tbody>
       <tr v-for="(quiz,index) in quizzes" :key="quiz.id">
         <td>{{ index+1 }}</td>
+        <td>{{ quiz.subject_name }}</td>
+        <td>{{ quiz.chapter_name }}</td>
         <td>{{ quiz.no_of_questions }}</td>
         <td>{{ quiz.date_of_quiz }}</td>
         <td>{{ quiz.time_duration }}</td>
         <td>
           <button @click="viewQuiz(quiz)" class="btn btn-info btn-sm mr-1">View</button>
-          <button @click="Start(quiz)" class="btn btn-success btn-sm">Start</button>
+          <!--<button @click="Start(quiz)" class="btn btn-success btn-sm">Start</button>-->
+          <button v-if="isFutureQuiz(quiz.date_of_quiz)" @click="Start(quiz)" class="btn btn-success btn-sm">Start</button>
+          <button v-else class="btn btn-danger btn-sm" disabled>Closed</button>
         </td>
         <td>{{ quiz.remarks }}</td>
       </tr>
@@ -71,6 +77,11 @@ export default {
     closeModal() {
       this.selectedQuiz = null;
     },
+    isFutureQuiz(quizDate) {
+      const currentDate = new Date();
+      const quizStartDate = new Date(quizDate);
+      return quizStartDate > currentDate;
+    },
   },
   async mounted() {
     const res = await fetch(location.origin + "/api/quizzes/today_or_future", {
@@ -80,6 +91,7 @@ export default {
     });
     if (res.ok) {
       this.quizzes = await res.json();
+      // console.log(this.quizzes);
     } else {
       console.error("Failed to fetch quizzes");
     }

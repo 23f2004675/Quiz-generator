@@ -20,8 +20,9 @@ class QuizAPI(Resource):
     @marshal_with(quizzes_fields)
     @auth_required('token')
     def get(self):
-        today = datetime.today().date()
-        Quizzes=Quiz.query.filter(Quiz.date_of_quiz >= today).all()
+        # today = datetime.today().date()
+        # Quizzes=Quiz.query.filter(Quiz.date_of_quiz >= today).all()
+        Quizzes=Quiz.query.all()
         if not Quizzes:
             return {"message":"no Quiz found"},404
         for quiz in Quizzes:

@@ -5,6 +5,7 @@ import Admin_dashboard from "../pages/Admin/Admin_dashboard.js";
 import Admin_quiz from "../pages/Admin/Admin_quiz.js";
 import Admin_summary from "../pages/Admin/Admin_summary.js";
 import Admin_user from "../pages/Admin/Admin_user.js";
+import Admin_search from "../pages/Admin/Admin_search.js";
 
 import User_dashboard from "../pages/User/User_dashboard.js";
 import Scores from "../pages/User/Scores.js";
@@ -12,6 +13,7 @@ import StartQuiz from "../pages/User/StartQuiz.js";
 import User_summary from "../pages/User/User_summary.js";
 
 import store from "./store.js";
+import User_search from "../pages/User/User_search.js";
 
 const About = {
   template: `
@@ -44,6 +46,11 @@ const routes = [
     meta: { requiresLogin: true, role: "user" },
   },
   {
+    path: "/user/search",
+    component: User_search,
+    meta: { requiresLogin: true, role: "user" },
+  },
+  {
     path: "/user/scores",
     component: Scores,
     meta: { requiresLogin: true, role: "user" },
@@ -62,6 +69,11 @@ const routes = [
   {
     path: "/admin/dashboard",
     component: Admin_dashboard,
+    meta: { requiresLogin: true, role: "admin" },
+  },
+  {
+    path: "/admin/search",
+    component: Admin_search,
     meta: { requiresLogin: true, role: "admin" },
   },
   {

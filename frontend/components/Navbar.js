@@ -28,10 +28,10 @@ export default {
                 <router-link to='/admin/user' class="nav-link text-warning">Users</router-link>
               </li>
               <li class="nav-item">
-                <router-link to='/admin/summary' class="nav-link text-warning">Summary</router-link>
+                <router-link to='/admin/search' class="nav-link text-warning">Search</router-link>
               </li>
               <li class="nav-item">
-                <input type="text" class="form-control mr-3" placeholder="Search" style="background-color: #d9bbf9; border: none; color: #36392a;" />
+                <router-link to='/admin/summary' class="nav-link text-warning">Summary</router-link>
               </li>
               <li class="nav-item">
                 <p class="nav-link text-light">Welcome Admin</p>
@@ -47,10 +47,10 @@ export default {
                 <router-link to='/user/scores' class="nav-link text-warning">Scores</router-link>
               </li>
               <li class="nav-item">
-                <router-link to='/user/summary' class="nav-link text-warning">Summary</router-link>
+                <router-link to='/user/search' class="nav-link text-warning">Search</router-link>
               </li>
               <li class="nav-item">
-                <input type="text" class="form-control mr-3" placeholder="Search" style="background-color: #d9bbf9; border: none; color: #36392a;" />
+                <router-link to='/user/summary' class="nav-link text-warning">Summary</router-link>
               </li>
               <li class="nav-item">
                 <p class="nav-link text-light">Welcome {{$store.state.fullname}}</p>

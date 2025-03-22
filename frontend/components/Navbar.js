@@ -36,6 +36,9 @@ export default {
               <li class="nav-item">
                 <p class="nav-link text-light">Welcome Admin</p>
               </li>
+              <li >
+              <button class="btn btn-primary ml-2" @click="downloadCSV">Download Report</button>
+            </li>
             </template>
 
             <!-- User Navigation -->
@@ -69,6 +72,34 @@ export default {
     handleLogout() {
       this.$store.commit("logout");
       this.$router.push("/");
+    },
+    async downloadCSV() {
+      const res = await fetch(
+        // location.origin + "/api/score/" + this.$store.state.user_id,
+        location.origin + "/create_csv/admin",
+        {
+          headers: {
+            "Authentication-token": this.$store.state.auth_token,
+          },
+        }
+      );
+      if (res.ok) {
+        const task_id = await res.json();
+        console.log(task_id.message);
+        const interval = setInterval(async () => {
+          const res = await fetch(
+            location.origin + "/get_csv/" + task_id.message
+          );
+          if (res.ok) {
+            console.log("CSV file is ready");
+            clearInterval(interval);
+            window.open(location.origin + "/get_csv/" + task_id.message);
+          }
+        }, 500);
+        // await fetch(location.origin + "/get_csv/" + task_id.message);
+      } else {
+        console.error("Failed to fetch quizzes");
+      }
     },
   },
 };

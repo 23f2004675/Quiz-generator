@@ -1,4 +1,4 @@
-from flask import current_app as app, jsonify, render_template, request
+from flask import current_app as app, jsonify, render_template, request, send_file
 from flask_security import auth_required, SQLAlchemyUserDatastore, verify_password, hash_password
 from .models import db,Chapter,User,Score
 
@@ -7,28 +7,29 @@ from datetime import datetime
 datastore:SQLAlchemyUserDatastore = app.security.datastore
 cache=app.cache
 
-# from ..tasks.tasks import add
+from celery.result import AsyncResult
+from ..tasks.tasks import create_csv_user, create_csv_admin
 
-from datetime import datetime, timedelta
-today = datetime.today()
-first_day_of_current_month = today.replace(day=1)
-last_day_of_current_month = today.replace(day=1, month=today.month+1) - timedelta(days=1)
-@app.get('/celery')
-def celery():
-    print('toda',today)
-  
-    user = User.query.filter_by(email="vaibhavsonisatya1@gmail.com").first()
-    if not user:
-        raise ValueError(f"User with email {to} not found")
-    print('user',user.fullname)
-    scores = Score.query.filter(
-        Score.user_id == user.id,
-        Score.timestamp >= first_day_of_current_month,
-        Score.timestamp <= last_day_of_current_month
-    ).all()
-    print('scores',scores)
+@auth_required('token')
+@app.get('/create_csv/user/<user_id>')
+def createCSV(user_id):
+    task=create_csv_user.delay(user_id)
+    return jsonify({'message': task.id}), 200
 
-    return "Hello",200
+@auth_required('token')
+@app.get('/create_csv/admin')
+def createCSVAdmin():
+    task=create_csv_admin.delay()
+    return jsonify({'message': task.id}), 200
+
+@auth_required('token')
+@app.get('/get_csv/<task_id>')
+def getCSV(task_id):
+    task=AsyncResult(task_id)
+    if task.ready():
+        return send_file(f'./backend/tasks/user-downloads/{task.result}')
+    else:
+        return jsonify({'message': 'not ready'}), 404
 
 
 @app.get('/')

@@ -27,6 +27,7 @@ feedparser==6.0.11
 Flask==3.1.0
 Flask-Caching==2.3.1
 Flask-Cors==5.0.0
+Flask-Excel==0.0.7
 Flask-Login==0.6.3
 Flask-Mail==0.10.0
 Flask-Principal==0.4.0
@@ -46,6 +47,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.5
 kiwisolver==1.4.7
 kombu==5.4.2
+lml==0.2.0
 Markdown==3.7
 MarkupSafe==3.0.2
 matplotlib==3.9.2
@@ -58,6 +60,9 @@ prompt_toolkit==3.0.48
 pycparser==2.22
 pydantic==2.10.6
 pydantic_core==2.27.2
+pyexcel==0.7.1
+pyexcel-io==0.6.7
+pyexcel-webio==0.1.4
 pyparsing==3.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
@@ -73,6 +78,7 @@ soupsieve==2.6
 SQLAlchemy==2.0.36
 starlette==0.45.3
 tabula-py==2.10.0
+texttable==1.7.0
 typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.3.0

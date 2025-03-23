@@ -17,8 +17,8 @@ class MakeChart(Resource):
 
         # Define the paths for the charts
         chart_urls = {
-            'bar_chart_url': 'frontend/assets/Images/quiz_by_subject.jpg',
-            'pie_chart_url': 'frontend/assets/Images/quizzes_by_month.jpg'
+            'bar_chart_url': f'frontend/assets/Images/quiz_by_subject{user_id}.jpg',
+            'pie_chart_url': f'frontend/assets/Images/quizzes_by_month{user_id}.jpg'
         }
 
         # Bar Chart: Number of quizzes per subject
@@ -37,28 +37,34 @@ class MakeChart(Resource):
         plt.savefig(chart_urls['bar_chart_url'])
         plt.close()
 
+        quizzes_by_month = {}
         # Pie Chart: Quizzes attempted by user across all 12 months
-        quizzes_by_month = {month: 0 for month in calendar.month_name[1:]}
+        # quizzes_by_month = {month: 0 for month in calendar.month_name[1:]}
         scores = Score.query.filter_by(user_id=user_id).all()
         for score in scores:
             month_name = score.timestamp.strftime("%B")
-            quizzes_by_month[month_name] += 1
+            if month_name in quizzes_by_month:
+                quizzes_by_month[month_name] += 1
+            else:
+                quizzes_by_month[month_name] = 1
+        if(list(quizzes_by_month.values())!=[]):
 
-        plt.figure(figsize=(8, 8))
-        plt.pie(
-            quizzes_by_month.values(),
-            labels=quizzes_by_month.keys(),
-            autopct='%1.1f%%',
-            startangle=140,
-            colors=plt.cm.Paired.colors
-        )
-        plt.title("Quizzes Attempted by Month")
-        plt.tight_layout()
-        plt.savefig(chart_urls['pie_chart_url'])
-        plt.close()
-
-        # Return the URLs of the generated charts
+            plt.figure(figsize=(8, 8))
+            plt.pie(
+                quizzes_by_month.values(),
+                labels=quizzes_by_month.keys(),
+                autopct='%1.1f%%',
+                startangle=140,
+                colors=plt.cm.Paired.colors
+            )
+            plt.title("Quizzes Attempted by Month")
+            plt.tight_layout()
+            plt.savefig(chart_urls['pie_chart_url'])
+            plt.close()
+        else:
+            chart_urls['pie_chart_url']=None
         return jsonify(chart_urls)
+
 
 class AdminSummaryCharts(Resource):
     @auth_required('token')

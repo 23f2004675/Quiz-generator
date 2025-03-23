@@ -34,8 +34,14 @@ export default {
       </div>
 
       <!-- Error Message -->
-      <div v-else class="alert alert-danger mt-4">
-        Failed to load quiz data. Please try again later.
+      <div v-else class="alert alert-danger mt-4 text-center">
+        Questions of this Quiz is being updated or deleted by Admin.
+        <div>
+        As we can see, the number of questions are 0.
+        </div>
+        <div>
+        Please be patient, Meanwhile start practising other Quizzes. Thank you.
+        </div>
       </div>
 
       <!-- Quiz Component -->

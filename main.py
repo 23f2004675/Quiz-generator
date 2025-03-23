@@ -39,18 +39,21 @@ import backend.tasks.celery_schedule
 #import backend.Createdata
 
 import backend.app.routes 
-from backend.api.subjects import SubjectsAPI
-from backend.api.chapters import ChapterAPI
-from backend.api.quiz import QuizAPI, QuizNewAPI
+from backend.api.subjects import SubjectsAPI, OneSubjectsAPI
+from backend.api.chapters import ChapterAPI, AllChapterAPI
+from backend.api.quiz import QuizAPI, QuizNewAPI, AdminQuizAPI
 from backend.api.score import get_scores
 from backend.api.questions import QuestionAPI, QAPI
 from backend.api.users import UserAPI, StatusAPI
 from backend.api.summary import MakeChart,AdminSummaryCharts
 
 api.add_resource(SubjectsAPI,'/api/subjects', "/api/subjects/<int:subject_id>")
+api.add_resource(OneSubjectsAPI,'/api/subject/<int:subject_id>/details')
+
 api.add_resource(ChapterAPI, '/api/chapters', '/api/chapters/<int:chapter_id>')
 
 api.add_resource(QuizAPI, '/api/quizzes/today_or_future', '/api/quizzes', '/api/quizzes/<int:quiz_id>')
+api.add_resource(AdminQuizAPI,'/api/admin/quizzes/today_or_future')
 
 api.add_resource(get_scores,'/api/score/<int:user_id>', '/api/score')
 api.add_resource(QuestionAPI,'/api/quiz/<int:quiz_id>', '/api/quizzes/<int:quiz_id>/questions', '/api/questions/<int:question_id>')
@@ -66,6 +69,7 @@ api.add_resource(MakeChart, '/api/chart/<int:user_id>')
 
 api.add_resource(AdminSummaryCharts, '/api/admin/summary')
 
+api.add_resource(AllChapterAPI, '/api/allchapters')
 
 if (__name__=='__main__'):
     app.run()

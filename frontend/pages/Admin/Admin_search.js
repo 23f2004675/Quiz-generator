@@ -40,6 +40,7 @@ export default {
                 <th>Full Name</th>
                 <th>Qualification</th>
                 <th>Date of Birth</th>
+                <th>Active</th>
               </tr>
             </thead>
             <tbody>
@@ -49,6 +50,11 @@ export default {
                 <td>{{ user.fullname }}</td>
                 <td>{{ user.qualification }}</td>
                 <td>{{ user.dob }}</td>
+                <td>
+                  <span :class="user.active ? 'badge bg-success' : 'badge bg-danger'">
+                    {{ user.active ? 'Yes' : 'No' }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -74,6 +80,7 @@ export default {
                 <th>Quiz Date</th>
                 <th>Duration</th>
                 <th>Remarks</th>
+                <th>Deleted</th>
               </tr>
             </thead>
             <tbody>
@@ -84,6 +91,11 @@ export default {
                 <td>{{ quiz.date_of_quiz }}</td>
                 <td>{{ quiz.time_duration }}</td>
                 <td>{{ quiz.remarks }}</td>
+                <td>
+                  <span :class="quiz.active ? 'badge bg-success' : 'badge bg-danger'">
+                    {{ !quiz.active ? 'Yes' : 'No' }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -107,6 +119,7 @@ export default {
                 <th>Quiz id</th>
                 <th>Question text</th>
                 <th>Question title</th>
+                <th>Deleted</th>
               </tr>
             </thead>
             <tbody>
@@ -115,6 +128,11 @@ export default {
                 <td>{{ question.quiz_id }}</td>
                 <td>{{ question.question_text }}</td>
                 <td>{{ question.question_title }}</td>
+                <td>
+                  <span :class="question.active ? 'badge bg-success' : 'badge bg-danger'">
+                    {{ !question.active ? 'Yes' : 'No' }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -160,7 +178,7 @@ export default {
       this.isLoading = true;
       try {
         const res = await fetch(
-          location.origin + "/api/quizzes/today_or_future",
+          location.origin + "/api/admin/quizzes/today_or_future",
           {
             headers: {
               "Authentication-token": this.$store.state.auth_token,

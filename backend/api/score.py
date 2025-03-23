@@ -23,7 +23,7 @@ class get_scores(Resource):
 
     @marshal_with(score_fields)
     @auth_required('token')
-    @cache.cached(timeout=5)
+    @cache.memoize(timeout=2)
     def get(self,user_id):
         Scores =(db.session.query(Score, Quiz, Chapter)
         .join(Quiz, Score.quiz_id == Quiz.id)

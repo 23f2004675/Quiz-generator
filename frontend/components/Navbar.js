@@ -2,7 +2,7 @@ export default {
   template: `
     <nav class="navbar navbar-expand-lg"  style="background-color: #4e5283; padding: 24px;">
       <div class="container">
-        <router-link to='/' class="navbar-brand text-warning f-2">Home</router-link>
+        <router-link to='/' class="navbar-brand text-warning f-2">QuizGen</router-link>
         
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
@@ -71,7 +71,7 @@ export default {
   methods: {
     handleLogout() {
       this.$store.commit("logout");
-      this.$router.push("/");
+      this.$router.push("/Login");
     },
     async downloadCSV() {
       const res = await fetch(

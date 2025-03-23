@@ -87,7 +87,7 @@ export default {
     };
   },
   methods: {
-    async submitLogin() {
+    async submitRegister() {
       const res = await fetch(location.origin + "/register", {
         method: "POST",
         headers: {
@@ -104,6 +104,11 @@ export default {
       if (res.ok) {
         console.log("we are registered");
         alert("we are registered");
+        this.email = null;
+        this.password = null;
+        this.fullname = null;
+        this.qualification = null;
+        this.dob = null;
       } else {
         console.error("Failed to registered");
       }

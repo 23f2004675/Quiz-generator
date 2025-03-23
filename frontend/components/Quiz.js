@@ -87,7 +87,7 @@ export default {
       this.$set(this.userAnswers, index, answer); // Update userAnswers reactively
     },
     goBack() {
-      this.$router.go(-2); // Navigate back to the previous page
+      this.$router.go(-1);
     },
   },
   mounted() {
@@ -117,6 +117,9 @@ export default {
           :isSubmitted="isSubmitted"
           @answer-selected="handleAnswerSelected" 
         />
+        <div class="text-muted small font-italic m-2 p-2">
+        Note: If option is selected, then please select again! (total questions: {{this.quiz.questions.length}})
+        </div>
       </div>
 
       <!-- Navigation Buttons -->
@@ -125,7 +128,7 @@ export default {
         <button class="btn btn-primary" @click="nextQuestion" v-if="currentQuestionIndex < quiz.questions.length - 1">Next</button>
         <button class="btn btn-success" @click="submitQuiz" v-if="currentQuestionIndex === quiz.questions.length - 1">Submit</button>
       </div>
-
+      
       <!-- Score & Feedback -->
       <div v-if="isSubmitted" class="mt-4 p-4 bg-light rounded">
   <h4 class="text-center mb-4">Quiz Results</h4>

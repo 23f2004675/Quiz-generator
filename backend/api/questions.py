@@ -28,20 +28,20 @@ all_questions_fields = {
     'options': fields.String, 
     'correct_option': fields.String,
     'question_title': fields.String,
+    'active': fields.Boolean,
 }
 
 class QuestionAPI(Resource):
 
     @marshal_with(quiz_fields)
     @auth_required('token')
-    @cache.memoize(timeout=5)
+    @cache.memoize(timeout=2)
     def get(self, quiz_id):
         
         quiz = Quiz.query.filter_by(id=quiz_id).first()
         if not quiz:
             return {"message": "Quiz not found"}, 404
-
-        questions = Question.query.filter_by(quiz_id=quiz.id).all()
+        questions = Question.query.filter_by(quiz_id=quiz.id, active=True).all()
         if not questions:
             return {"message": "No questions found for this quiz"}, 404
 
@@ -86,7 +86,8 @@ class QuestionAPI(Resource):
         question = Question.query.filter_by(id=question_id).first()
         if not question:
             return {"message": "Question not found"}, 404
-        db.session.delete(question)
+        # db.session.delete(question)
+        question.active = False
         db.session.commit()
         return {"message": "Question deleted successfully"}, 200
 

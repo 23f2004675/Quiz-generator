@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_restful import Resource, fields, marshal_with
 from flask_security import auth_required
-from ..app.models import db, Quiz, Subject, Chapter
+from ..app.models import db, Quiz, Subject, Chapter, Question
 
 from flask import current_app as app
 cache=app.cache
@@ -26,12 +26,17 @@ quiz_chapter_fields = {
     'remarks': fields.String,
 }
 
+all_chapters_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+}
+
 class ChapterAPI(Resource):
     @auth_required('token')
     @marshal_with(quiz_chapter_fields)
-    @cache.cached(timeout=5)
+    @cache.cached(timeout=2)
     def get(self):
-        quizzes = Quiz.query.all()
+        quizzes = Quiz.query.filter_by(active=True).all()
         
         if not quizzes:
             return {"message": "No quizzes found"}, 404
@@ -51,7 +56,7 @@ class ChapterAPI(Resource):
                         'question_title': question.question_title,
                         'options': question.options,
                         'correct_option': question.correct_option,
-                    } for question in quiz.questions
+                    } for question in quiz.questions if question.active
                 ],
             }
             quiz_data_list.append(quiz_data)
@@ -91,11 +96,23 @@ class ChapterAPI(Resource):
         if not chapter:
             return {"message": "Chapter not found"}, 404
 
-        # Delete the chapter
-        db.session.delete(chapter)
+        chapter.active = False
+
+        # Find all quizzes associated with the chapter
+        quizzes = Quiz.query.filter_by(chapter_id=chapter_id).all()
+        if quizzes:
+            for quiz in quizzes:
+                quiz.active = False
+                questions = Question.query.filter_by(quiz_id=quiz.id).all()
+                if questions:
+                    for question in questions:
+                        question.active = False
+
+        
         db.session.commit()
 
         return {"message": "Chapter deleted successfully"}, 200
+
     
     @auth_required('token')
     def put(self, chapter_id):
@@ -110,3 +127,13 @@ class ChapterAPI(Resource):
 
         db.session.commit()
         return {"message": "Chapter updated successfully"}
+
+class AllChapterAPI(Resource):
+    @auth_required('token')
+    @marshal_with(all_chapters_fields)
+    @cache.cached(timeout=2)
+    def get(self):
+        chapters = Chapter.query.all()  # Get all chapters
+        if not chapters:
+            return {"message": "No chapters found"}, 404    
+        return chapters

@@ -29,6 +29,7 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
     description = db.Column(db.String, nullable=False)
+    active = db.Column(db.Boolean, default=True)
     chapters = db.relationship('Chapter', back_populates='subject')
 
 class Chapter(db.Model):
@@ -36,7 +37,7 @@ class Chapter(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     name = db.Column(db.String, nullable=False, unique=True)
     description = db.Column(db.String, nullable=False)
-    
+    active = db.Column(db.Boolean, default=True)
     subject = db.relationship('Subject', back_populates='chapters')
     quizzes = db.relationship('Quiz', back_populates='chapter')
 
@@ -46,6 +47,7 @@ class Quiz(db.Model):
     date_of_quiz = db.Column(db.Date, nullable=False)
     time_duration = db.Column(db.String, nullable=False)
     remarks = db.Column(db.String, nullable=True)
+    active = db.Column(db.Boolean, default=True)
     chapter = db.relationship('Chapter', back_populates='quizzes')
     questions = db.relationship('Question', back_populates='quiz')
     scores = db.relationship('Score', back_populates='quiz')
@@ -57,6 +59,7 @@ class Question(db.Model):
     options = db.Column(db.String, nullable=False)  # Comma-separated
     correct_option = db.Column(db.String, nullable=False)
     question_title = db.Column(db.String, nullable=False)
+    active = db.Column(db.Boolean, default=True)
     quiz = db.relationship('Quiz', back_populates='questions')
 
 class Score(db.Model):

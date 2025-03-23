@@ -49,7 +49,7 @@ export default {
       Chapter Name: {{selectedQuizDetail.chapter_name}} <br>
       Date: {{selectedQuizDetail.date_of_quiz}}  (YYYY-MM--DD)<br>
       Time Duration: {{selectedQuizDetail.time_duration}} <br>
-      Toal Questions: {{selectedQuizDetail.total_questions}} <br>
+      Total Questions: {{selectedQuizDetail.total_questions}} <br>
       Remarks: {{selectedQuizDetail.remarks}} <br>
       <button class="btn btn-danger btn-sm mt-2" @click="closeModal">Close</button>
     </div>
@@ -60,8 +60,13 @@ export default {
   <div v-if="addPopQuiz" class="modal-overlay">
     <div class="modal-content">
       <h3>New Quiz</h3>
-      <label for="chapterId">Name:</label>
-      <input type="text" id="chapterId" v-model="newChapterId" placeholder="Enter chapter id" />
+      <label for="chapter">Chapter</label>
+          <select class="form-control" id="chapter" v-model="newChapterId" required>
+            <option value="" disabled>Select a Chapter</option>
+            <option v-for="chapter in chapters" :key="chapter.id" :value="chapter.id">
+              {{ chapter.name }}
+            </option>
+          </select>
       <label for="Date">Date:</label>
       <input type="date" id="Date" v-model="newDate" />
       <label for="Duration">Date:</label>
@@ -173,11 +178,13 @@ export default {
       newEditCorrectAnswer: "",
 
       selectedQuizDetail: null,
+
+      chapters: [],
     };
   },
   async mounted() {
-    await this.fetchQuizzes(); // Fetch Quizzes when the component is mounted
-    // console.log("All Quizzes", this.All_Quizes);
+    await this.fetchQuizzes();
+    await this.fetchChapters();
   },
   methods: {
     openAddQuizModal() {
@@ -212,10 +219,24 @@ export default {
         console.error("Failed to fetch subjects");
       }
     },
+    async fetchChapters() {
+      const res = await fetch(location.origin + "/api/allchapters", {
+        headers: {
+          "Authentication-token": this.$store.state.auth_token,
+        },
+      });
+      if (res.ok) {
+        this.chapters = await res.json();
+        console.log(this.chapters);
+      } else {
+        console.error("Failed to fetch chapters");
+      }
+    },
     async addQuiz() {
       const chapter_id = this.newChapterId;
       const date = this.newDate;
       const time_duration = this.newTimeDuration;
+      // console.log(chapter_id, date, time_duration);
 
       if (!chapter_id || !date || !time_duration) {
         alert("All fields are required!");
@@ -225,7 +246,7 @@ export default {
       const quizDetails = {
         chapter_id: parseInt(chapter_id, 10),
         date,
-        time_duration: parseInt(time_duration, 10),
+        time_duration: time_duration,
       };
 
       try {
@@ -293,7 +314,12 @@ export default {
       this.remarks = "";
     },
     async deleteQuiz(Quiz) {
-      if (!confirm("Are you sure you want to delete this quiz?")) return;
+      if (
+        !confirm(
+          "Are you sure you want to delete this quiz (all questions related to quiz will be deleted)?"
+        )
+      )
+        return;
 
       try {
         const res = await fetch(`${location.origin}/api/quizzes/${Quiz.id}`, {

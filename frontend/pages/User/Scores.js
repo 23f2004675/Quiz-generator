@@ -24,6 +24,9 @@ export default {
       </tr>
     </tbody>
   </table>
+  <div v-if="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+  </div>
   <div class="text-center">
     <button class="btn btn-primary btn-lg my-3" @click="downloadCSV">
     <i class="fas fa-download"></i> Download Scores as CSV
@@ -34,6 +37,7 @@ export default {
       `,
   data() {
     return {
+      errorMessage: null,
       scores: [],
     };
   },
@@ -89,6 +93,8 @@ export default {
     if (res.ok) {
       this.scores = await res.json();
       console.log(this.scores);
+    } else if (res.status === 404) {
+      this.errorMessage = "No scores found";
     } else {
       console.error("Failed to fetch quizzes");
     }

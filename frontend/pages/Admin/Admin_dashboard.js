@@ -6,7 +6,7 @@ export default {
       <div class="card mb-4">
         <div class="card-body">
           <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-            <h2 style="flex-grow: 1; text-align: center; margin-bottom: 10;"><u>{{ Subject.name }}</u></h2>
+            <h2 style="flex-grow: 1; text-align: center; margin-bottom: 10; cursor: pointer;" @click="fetchSubject(Subject)"><u>{{ Subject.name }}</u></h2>
             <div>
               <img class="icon" src="/static/assets/edit.png" @click="openEditSubjectModal(Subject)" alt="Edit">
               <img class="icon" src="/static/assets/delete.png" @click="deleteSubject(Subject)" alt="Delete">
@@ -41,6 +41,17 @@ export default {
   <div class="text-center mt-4">
     <button @click="openAddSubjectModal" class="btn btn-primary btn-lg">+ Add Subject</button>
   </div>
+
+  <!-- Subject Detail Modal -->
+  <div v-if="subject" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Subject Details</h3>
+      Subject Name: {{subject.name}} <br>
+      Description: {{subject.description}} <br>
+      <button class="btn btn-danger btn-sm mt-2" @click="closeModal">Close</button>
+    </div>
+  </div>
+
 
   <!-- Add Subject Modal -->
   <div v-if="addPopSubject" class="modal-overlay">
@@ -118,6 +129,8 @@ export default {
 
       editChapterName: "",
       editChapterDescription: "",
+
+      subject: null,
     };
   },
   async mounted() {
@@ -141,6 +154,7 @@ export default {
       this.selectedSubject = null;
       this.selectedSChapeter = null;
       this.selectedChapter = null;
+      this.subject = null;
     },
 
     async fetchSubjects() {
@@ -152,6 +166,7 @@ export default {
         });
         if (res.ok) {
           this.All_Subjects = await res.json();
+          console.log(this.All_Subjects);
         } else {
           console.error("Failed to fetch subjects");
         }
@@ -219,7 +234,7 @@ export default {
     async deleteSubject(Subject) {
       if (
         !confirm(
-          `Are you sure you want to delete the subject "${Subject.name}"?`
+          `Are you sure you want to delete the subject (all chapters/quiz/questions will be deleted related to subject) "${Subject.name}"?`
         )
       ) {
         return;
@@ -297,7 +312,7 @@ export default {
     async deleteChapter(chapter) {
       if (
         !confirm(
-          `Are you sure you want to delete the chapter "${chapter.name}"?`
+          `Are you sure you want to delete the chapter (all quiz and all question related to that chapter will be deleted) "${chapter.name}"?`
         )
       ) {
         return;
@@ -315,6 +330,21 @@ export default {
         await this.fetchSubjects(); // Refresh subject list
       } else {
         alert("Error deleting chapter");
+      }
+    },
+    async fetchSubject(Subject) {
+      const res = await fetch(
+        `${location.origin}/api/subject/${Subject.id}/details`,
+        {
+          headers: {
+            "Authentication-token": this.$store.state.auth_token,
+          },
+        }
+      );
+      if (res.ok) {
+        this.subject = await res.json();
+      } else {
+        console.error("Failed to fetch subject");
       }
     },
   },

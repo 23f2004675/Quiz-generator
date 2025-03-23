@@ -17,23 +17,24 @@ quizzes_fields={
     'no_of_questions': fields.Integer,
     'chapter_name' : fields.String,
     'subject_name' : fields.String,
+    'active': fields.Boolean,
 }
 
 class QuizAPI(Resource):
 
     @marshal_with(quizzes_fields)
     @auth_required('token')
-    @cache.cached(timeout=5)
+    @cache.cached(timeout=2)
     def get(self):
         # today = datetime.today().date()
         # Quizzes=Quiz.query.filter(Quiz.date_of_quiz >= today).all()
-        Quizzes=Quiz.query.all()
+        Quizzes=Quiz.query.filter_by(active=True).all()
         if not Quizzes:
             return {"message":"no Quiz found"},404
         for quiz in Quizzes:
-            total_questions = len(quiz.questions)
+            questions=Question.query.filter_by(quiz_id=quiz.id,active=True).all()
+            total_questions = len(questions)
             quiz.no_of_questions = total_questions
-        
             chapter_name = quiz.chapter.name if quiz.chapter else None
             quiz.chapter_name = chapter_name  
             subject_name = quiz.chapter.subject.name if quiz.chapter and quiz.chapter.subject else None
@@ -47,7 +48,7 @@ class QuizAPI(Resource):
         chapter_id = data.get("chapter_id")
         date = data.get("date")
         time_duration = data.get("time_duration")
-
+        # print(data)
         try:
             quiz_date = datetime.strptime(date, "%Y-%m-%d").date()
         except ValueError:
@@ -98,8 +99,12 @@ class QuizAPI(Resource):
         quiz = Quiz.query.get(quiz_id)
         if not quiz:
             return {"message": "Quiz not found"}, 404
+        questions = Question.query.filter_by(quiz_id=quiz_id).all()
+        for question in questions:
+            question.active = False
+        quiz.active = False
+        
 
-        db.session.delete(quiz)
         db.session.commit()
 
         return {"message": "Quiz deleted successfully"}, 200
@@ -131,3 +136,23 @@ class QuizNewAPI(Resource):
         }
         # print(response)
         return response, 200
+
+class AdminQuizAPI(Resource):
+
+    @marshal_with(quizzes_fields)
+    @auth_required('token')
+    @cache.cached(timeout=2)
+    def get(self):
+        # today = datetime.today().date()
+        # Quizzes=Quiz.query.filter(Quiz.date_of_quiz >= today).all()
+        Quizzes=Quiz.query.all()
+        if not Quizzes:
+            return {"message":"no Quiz found"},404
+        for quiz in Quizzes:
+            total_questions = len(quiz.questions)
+            quiz.no_of_questions = total_questions
+            chapter_name = quiz.chapter.name if quiz.chapter else None
+            quiz.chapter_name = chapter_name  
+            subject_name = quiz.chapter.subject.name if quiz.chapter and quiz.chapter.subject else None
+            quiz.subject_name = subject_name  
+        return Quizzes

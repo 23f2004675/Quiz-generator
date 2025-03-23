@@ -1,6 +1,6 @@
 export default {
   template: `
-      <div>
+      <div class="container mt-4">
         <h3 class="my-5 text-center"><u>Search Quizzes by Subject or Chapter</u></h3>
         
         <!-- Search Bar -->

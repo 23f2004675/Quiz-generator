@@ -42,40 +42,49 @@ def home():
 # @cache.memoize(timeout=5)
 
 
+# from flask import jsonify, request
+
 @app.route('/login', methods=['POST'])
 def login():
-    data=request.get_json()
-    email=data.get('email')
-    password=data.get('password')
-    
-    if not email or not password:
-        return jsonify({'message': 'invalid inputs'}), 404 
-    
-    user=datastore.find_user(email=email)
-    if not user:
-        return jsonify({'message': 'invalid email'}), 404 
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
-    if verify_password(password, user.password):
-        role= user.roles[0].name
-        if role=='admin':
-            return jsonify({
-                'id': user.id,
-                'email': user.email,
-                'role': user.roles[0].name,
-                'token': user.get_auth_token(),
-                })
-        return jsonify({
-            'id': user.id,
-            'email': user.email,
-            'password': user.password,
+    # Check for missing inputs
+    if not email or not password:
+        return jsonify({'message': 'Email and password are required'}), 400
+
+    # Find user by email
+    user = datastore.find_user(email=email)
+    if not user:
+        return jsonify({'message': 'Invalid email or user does not exist'}), 404
+
+    # Check if the account is active
+    if not user.active:
+        return jsonify({'message': 'Your account has been deactivated. Please contact the admin.'}), 401
+
+    # Verify password
+    if not verify_password(password, user.password):
+        return jsonify({'message': 'Wrong password. Please try again.'}), 401
+
+    # Generate token and prepare response
+    role = user.roles[0].name
+    response_data = {
+        'id': user.id,
+        'email': user.email,
+        'role': role,
+        'token': user.get_auth_token(),
+    }
+
+    # Include additional fields for non-admin users
+    if role != 'admin':
+        response_data.update({
             'fullname': user.fullname,
             'qualification': user.qualification,
             'dob': user.dob,
-            'token': user.get_auth_token(),
-            'role': user.roles[0].name,
-            })
+        })
 
-    return jsonify({'message': 'password wrong'}), 404 
+    return jsonify(response_data), 200
 
 @app.route('/register',methods=['POST'])
 def register():

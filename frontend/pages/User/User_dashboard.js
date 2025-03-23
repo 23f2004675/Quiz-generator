@@ -1,6 +1,6 @@
 export default {
   template: `
-  <div>
+  <div class="container mt-4">
   <h3 class="my-5 text-center"><u>Upcoming Quizzes</u></h3>
   <table class="table table-bordered table-striped">
     <thead class="thead-dark">

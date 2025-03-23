@@ -31,7 +31,7 @@ export default {
             @input="searchUsers"
           />
         </div>
-        <div v-if="selectedService === 'Users'">
+        <div v-if="selectedService === 'Users'" class="container mt-4">
           <table class="table table-bordered table-striped">
             <thead class="thead-dark">
               <tr>
@@ -64,7 +64,7 @@ export default {
             @input="searchQuizzes"
           />
         </div>
-        <div v-if="selectedService === 'Subjects/Quizzes'">
+        <div v-if="selectedService === 'Subjects/Quizzes'" class="container mt-4">
           <table class="table table-bordered table-striped">
             <thead class="thead-dark">
               <tr>
@@ -99,7 +99,7 @@ export default {
             @input="searchQuestions"
           />
         </div>
-        <div v-if="selectedService === 'Questions'">
+        <div v-if="selectedService === 'Questions'" class="container mt-4">
           <table class="table table-bordered table-striped">
             <thead class="thead-dark">
               <tr>

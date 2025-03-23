@@ -2,62 +2,69 @@ export default {
   template: `
   <div class="container mt-5">
     <h2 class="mb-4">User Management</h2>
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Email</th>
-          <th>Full Name</th>
-          <th>Qualification</th>
-          <th>Date of Birth</th>
-          <th>Active</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(user,index) in All_users" :key="user.id">
-          <td>{{ index + 1}}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.fullname }}</td>
-          <td>{{ user.qualification }}</td>
-          <td>{{ user.dob }}</td>
-          <td>{{ user.active ? 'Yes' : 'No' }}</td>
-          <td>
-            <button @click="openEditUserModal(user)" class="btn btn-warning btn-sm">Edit</button>
-            <!-- Show Deactivate button if user is active -->
-            <button v-if="user.active" @click="toggleUserStatus(user)" class="btn btn-danger btn-sm">
-              Deactivate
-            </button>
-            <!-- Show Activate button if user is inactive -->
-            <button v-else @click="toggleUserStatus(user)" class="btn btn-success btn-sm">
-              Activate
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive"> <!-- Makes the table responsive -->
+      <table class="table table-bordered table-striped table-hover shadow-sm">
+        <thead class="thead-dark"> <!-- Dark header for contrast -->
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Qualification</th>
+            <th>Date of Birth</th>
+            <th>Active</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(user, index) in All_users" :key="user.id">
+            <td>{{ index + 1 }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.fullname }}</td>
+            <td>{{ user.qualification }}</td>
+            <td>{{ user.dob }}</td>
+            <td>
+              <span :class="user.active ? 'badge bg-success' : 'badge bg-danger'">
+                {{ user.active ? 'Yes' : 'No' }}
+              </span>
+            </td>
+            <td>
+              <!-- Edit Button with Icon -->
+              <button @click="openEditUserModal(user)" class="btn btn-warning btn-sm me-2">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <!-- Deactivate/Activate Button with Icon -->
+              <button v-if="user.active" @click="toggleUserStatus(user)" class="btn btn-danger btn-sm">
+                <i class="fas fa-times"></i> Deactivate
+              </button>
+              <button v-else @click="toggleUserStatus(user)" class="btn btn-success btn-sm">
+                <i class="fas fa-check"></i> Activate
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      <!-- Edit User Modal -->
+      <div v-if="selectedUser" class="modal-overlay">
+        <div class="modal-content">
+          <h3>Edit User</h3>
+          <label for="email">Email:</label>
+          <input type="email" id="email" v-model="editEmail" :placeholder="selectedUser.email" />
 
-    <!-- Edit User Modal -->
-    <div v-if="selectedUser" class="modal-overlay">
-      <div class="modal-content">
-        <h3>Edit User</h3>
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="editEmail" :placeholder="selectedUser.email" />
+          <label for="fullname">Full Name:</label>
+          <input type="text" id="fullname" v-model="editFullname" :placeholder="selectedUser.fullname" />
 
-        <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" v-model="editFullname" :placeholder="selectedUser.fullname" />
+          <label for="qualification">Qualification:</label>
+          <input type="text" id="qualification" v-model="editQualification" :placeholder="selectedUser.qualification" />
 
-        <label for="qualification">Qualification:</label>
-        <input type="text" id="qualification" v-model="editQualification" :placeholder="selectedUser.qualification" />
+          <label for="dob">Date of Birth:</label>
+          <input type="date" id="dob" v-model="editDob" :placeholder="selectedUser.dob" />
 
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" v-model="editDob" :placeholder="selectedUser.dob" />
-
-        <button @click="editUser(user)" class="btn btn-success mt-3">Edit</button>
-        <button @click="closeUserModal" class="btn btn-danger">Close</button>
+          <button @click="editUser(user)" class="btn btn-success mt-3">Edit</button>
+          <button @click="closeUserModal" class="btn btn-danger">Close</button>
+        </div>
       </div>
     </div>
-  </div>
         `,
   data() {
     return {

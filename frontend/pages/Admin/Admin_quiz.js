@@ -15,7 +15,7 @@ export default {
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th>Chapter Name</th>
+                <th>Question no.</th>
                 <th>Question Title</th>
                 <th>Action</th>
               </tr>

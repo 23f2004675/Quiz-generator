@@ -11,7 +11,7 @@ export default {
 
   <!-- User Attempts Chart -->
   <div v-if="chart_urls.user_attempts_chart_url" class="chart-container">
-    <h4>Subject-wise User Attempts</h4>
+    <h4 class="mt-4">Quiz-wise User Attempts</h4>
     <img :src="getStaticUrl(chart_urls.user_attempts_chart_url)" alt="Subject-wise User Attempts" />
   </div>
 

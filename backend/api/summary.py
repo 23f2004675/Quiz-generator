@@ -123,8 +123,8 @@ class AdminSummaryCharts(Resource):
 
         plt.figure(figsize=(10, 6))
         plt.bar(subjects, user_attempts, color='orange')
-        plt.title("Subject-wise User Attempts")
-        plt.xlabel("Subjects")
+        plt.title("Quiz-wise User Attempts")
+        plt.xlabel("Quiz")
         plt.ylabel("Number of Attempts")
         plt.xticks(rotation=45, ha="right")
         plt.tight_layout()

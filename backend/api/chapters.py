@@ -133,7 +133,7 @@ class AllChapterAPI(Resource):
     @marshal_with(all_chapters_fields)
     @cache.cached(timeout=2)
     def get(self):
-        chapters = Chapter.query.all()  # Get all chapters
+        chapters = Chapter.query.filter_by(active=True).all()  # Get all chapters
         if not chapters:
             return {"message": "No chapters found"}, 404    
         return chapters

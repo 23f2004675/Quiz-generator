@@ -9,22 +9,104 @@ Quizgen is a dynamic web application designed to create, manage, and master quiz
 
 ## Table of Contents
 
+- [File Structure](#file-structure)
 - [Roles](#roles)
+  - [1. Admin (Quiz Master)](#1-admin-quiz-master)
+  - [2. User](#2-user)
 - [Database Structure](#database-structure)
-  - [User Table Schema](#user-table-schema)
-  - [Quiz Table Schema](#quiz-table-schema)
-  - [Question Table Schema](#question-table-schema)
-  - [Score Table Schema](#score-table-schema)
-  - [Subject Table Schema](#subject-table-schema)
-  - [Chapter Table Schema](#chapter-table-schema)
-  - [Role Table Schema](#role-table-schema)
-  - [UserRoles Table Schema](#userroles-table-schema)
+  - [User Table](#user-table)
+  - [Role Table](#role-table)
+  - [UserRoles Table](#userroles-table)
+  - [Subject Table](#subject-table)
+  - [Chapter Table](#chapter-table)
+  - [Quiz Table](#quiz-table)
+  - [Question Table](#question-table)
+  - [Score Table](#score-table)
 - [ER Diagram](#er-diagram)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Screenshots](#screenshots)
+
+
+## File Structure
+
+```bash
+Quiz-Master
+├── backend/                     # Backend Python modules
+│   ├── api/                     # API endpoints
+│   │   ├── __pycache__/         # Python compiled bytecode
+│   │   ├── chapters.py          # Chapter-related endpoints
+│   │   ├── quiz.py              # Quiz management endpoints
+│   │   ├── score.py             # Score handling endpoints
+│   │   ├── subjects.py          # Subject management endpoints
+│   │   ├── summary.py           # Summary/analytics endpoints
+│   │   └── users.py             # User management endpoints
+│   ├── app/                     # Application logic
+│   │   ├── __pycache__/         # Python compiled bytecode
+│   │   ├── config.py            # Application configuration
+│   │   ├── models.py            # Database models
+│   │   └── routes.py            # Main application routes
+│   ├── tasks/                   # Celery background tasks
+│   │   ├── __pycache__/         # Python compiled bytecode
+│   │   ├── user-downloads/      # Generated user files
+│   │   │   ├── admin_1b611c14-6d43-4f94-958e-41
+│   │   │   └── score_fe9937b5-d534-4db8-aebb-9c
+│   │   ├── celery_schedule.py   # Celery beat schedule
+│   │   ├── celery.py            # Celery configuration
+│   │   ├── mail_service.py      # Email service
+│   │   └── tasks.py             # Task definitions
+│   └── CreateData.py            # Database initialization script
+├──frontend/
+│   ├── assets/                  # Static assets (images, fonts)
+│   ├── components/              # Reusable components
+│   │   ├── Footer.js            # Footer component
+│   │   ├── Navbar.js            # Navigation bar
+│   │   ├── Question.js          # Question component
+│   │   └── Quiz.js              # Quiz container
+│   ├── pages/                   # Page components
+│   │   ├── Admin/               # Admin views
+│   │   │   ├── Admin_dashboard.js
+│   │   │   ├── Admin_quiz.js
+│   │   │   ├── Admin_search.js
+│   │   │   ├── Admin_summary.js
+│   │   │   └── Admin_user.js
+│   │   ├── User/                # User views
+│   │   │   ├── Scores.js
+│   │   │   ├── StartQuiz.js
+│   │   │   ├── User_dashboard.js
+│   │   │   ├── User_search.js
+│   │   │   └── User_summary.js
+│   │   ├── LoginPage.js         # Auth pages
+│   │   └── RegisterPage.js
+│   ├── utils/                   # Utilities
+│   │   ├── router.js            # Routing logic
+│   │   └── store.js             # State management
+│   ├── app.js                   # Main application entry
+│   ├── daily.html               # Daily report template
+│   ├── index.html               # Main HTML entry point
+│   └── monthly_report.html      # Monthly report template
+│
+├── instance/                    # Instance-specific files
+│   └── database.sqlite3         # SQLite database
+│
+├── .gitignore                   # Git ignore rules
+├── celerybeat-schedule.db       # Celery beat schedule DB
+├── dump.rdb                     # Redis dump file
+├── ER_diagram.png               # Database schema diagram
+├── local_setup.sh               # Local environment setup
+├── main.py                      # Flask application entry
+├── QUIZGEN_PROJECT_REPORT.pdf   # Project documentation
+├── README.md                    # Project readme
+├── requirements.txt             # Python dependencies
+├── start_application.sh         # Application startup script
+├── start_beat.sh                # Celery beat scheduler
+├── start_mailing.sh             # Email scheduling script
+├── start_redis.sh               # Redis server script
+└── start_worker.sh              # Celery worker script
+
+```
 
 ## Roles
 
@@ -68,9 +150,9 @@ Quizgen has two main roles:
   - Receiving daily quiz reminders.
   - Getting a monthly activity report via email.
 
-## 🗃️ Database Structure
+## Database Structure
 
-### `User` Table
+### User Table
 
 | Column        | Type         | Description              |
 | ------------- | ------------ | ------------------------ |
@@ -85,7 +167,7 @@ Quizgen has two main roles:
 | roles         | Relationship | Many-to-Many with `Role` |
 | scores        | Relationship | One-to-Many with `Score` |
 
-### `Role` Table
+### Role Table
 
 | Column      | Type    | Description      |
 | ----------- | ------- | ---------------- |
@@ -93,7 +175,7 @@ Quizgen has two main roles:
 | name        | String  | Unique, Not Null |
 | description | String  | Not Null         |
 
-### `UserRoles` Table
+### UserRoles Table
 
 | Column  | Type    | Description          |
 | ------- | ------- | -------------------- |
@@ -157,7 +239,44 @@ Quizgen has two main roles:
 | timestamp | DateTime | Not Null             |
 | score     | String   | Not Null             |
 
-# er diagram
+## ER Diagram
+
 ![Quiz_Master](https://github.com/user-attachments/assets/a6eb18aa-bd12-44b9-ad0e-27df5ffabc03)
+
+## Technologies Used
+
+### 🔧 Backend & API
+
+- **Flask** – Lightweight Python web framework for backend logic.
+- **Flask-SQLAlchemy** – ORM for seamless SQLite database interactions.
+- **Flask-RESTful** – Simplifies RESTful API endpoint creation.
+- **Flask-Security** – Provides authentication/authorization, replacing JWT with built-in role-based access control.
+- **Flask-Caching** – Uses Redis to cache frequently accessed data and boost performance.
+- **Flask-Excel** – Enables CSV/Excel file generation for quiz-related data export.
+
+### 🖥️ Frontend
+
+- **Vue.js** – Reactive, component-based front-end framework using Vue CLI for modular development.
+- **Bootstrap** – For responsive design and pre-styled UI components.
+
+### 🗃️ Database & Storage
+
+- **SQLite** – Lightweight, file-based database used to manage user data, quizzes, scores, etc.
+
+### ⚙️ Performance & Background Tasks
+
+- **Redis** – Serves as a caching layer and message broker.
+- **Celery** – Manages asynchronous tasks such as:
+  - Daily quiz reminders
+  - Monthly performance report emails
+  - Exporting quiz results as CSV
+
+### 🧪 Testing & Utilities
+
+- **MailHog** – A local SMTP server used for testing email functionalities (e.g., reminders and reports).
+- **Postman** – Used for API testing and verifying endpoints during development.
+- **RedisInsight** – GUI tool for inspecting Redis keys and performance.
+- **DB Browser for SQLite** – Visual interface for managing and browsing SQLite databases.
+
 
 

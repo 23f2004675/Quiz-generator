@@ -26,7 +26,7 @@ Quizgen is a dynamic web application designed to create, manage, and master quiz
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [Launch Services](#launch-services)
 - [Screenshots](#screenshots)
 
 
@@ -278,5 +278,57 @@ Quizgen has two main roles:
 - **RedisInsight** – GUI tool for inspecting Redis keys and performance.
 - **DB Browser for SQLite** – Visual interface for managing and browsing SQLite databases.
 
+## Getting Started
+
+### Prerequisites
+
+Ensure you have these installed before proceeding:
+
+1. **Redis** (v6.0+):
+   ```bash
+   brew install redis                # macOS
+   ```
+2. **Python** 3.13+:
+    ```bash
+    python3 --version                 # Verify installation
+    ```
+3. **Python Requirements**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+4. **MailHog** (for local email testing):
+    ```bash
+    brew install mailhog              # macOS
+    ```
+
+### Launch Services
+
+1. **Start Redis**
+   ```bash
+   ./start_redis.sh
+   ```
+2. **Start MailHog**:
+    ```bash
+    ./start_mailing.sh
+    ```
+3. **Start Celery Beat**:
+    ```bash
+    ./start_beat.sh
+    ```
+4. **Start Celery Worker** :
+    ```bash
+    ./start_worker.sh
+    ```
+5. **Launch Application** :
+    ```bash
+    ./start_application.sh
+    ```
+### Note:
+- Run all shell scripts in current directory.
+- Make all scripts executable first:
+```bash
+chmod +x *.sh
+```
+## Screenshots
 
 

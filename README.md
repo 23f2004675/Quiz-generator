@@ -4,8 +4,7 @@ Quizgen is a dynamic web application designed to create, manage, and master quiz
 
 [![Demo Video](https://img.shields.io/badge/Video_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://drive.google.com/file/d/16PTD8y75gmB-HCmemrKdMZSep47nk59_/view?usp=sharing)
 
-![Quizgen Screenshot](https://github.com/user-attachments/assets/your-screenshot-path-here)  
-\_(Add a screenshot of your application's homepage or interface)
+![Screenshot 2025-04-24 at 1 48 37 AM](https://github.com/user-attachments/assets/78e2a35c-574f-462a-acf6-3747d712e944)
 
 ## Table of Contents
 
@@ -329,6 +328,28 @@ Ensure you have these installed before proceeding:
 ```bash
 chmod +x *.sh
 ```
+
 ## Screenshots
 
+![Screenshot 2025-04-24 at 1 48 55 AM](https://github.com/user-attachments/assets/c6b0031c-8305-422a-b146-afd8ed8decc0)
+![Screenshot 2025-04-24 at 1 50 11 AM](https://github.com/user-attachments/assets/6dd9e3e8-c6f4-4a70-b623-ae1bbfdc3bd2)
+![Screenshot 2025-04-24 at 1 50 40 AM](https://github.com/user-attachments/assets/c312f045-bbed-45c1-b663-76b7b8db9bb5)
+![Screenshot 2025-04-24 at 1 51 28 AM](https://github.com/user-attachments/assets/f036b5cb-6a4f-41ca-9abf-5c4e70a1f67e)
+![Screenshot 2025-04-24 at 1 51 42 AM](https://github.com/user-attachments/assets/7d44395a-a428-4f9b-920d-38cd79e80c7a)
+![Screenshot 2025-04-24 at 1 51 55 AM](https://github.com/user-attachments/assets/1b4e0ac0-746d-4220-96d6-4ce52b911247)
+![Screenshot 2025-04-24 at 1 52 09 AM](https://github.com/user-attachments/assets/79aea30c-e690-4215-a0a3-5c1a060c73e5)
+![Screenshot 2025-04-24 at 1 52 19 AM](https://github.com/user-attachments/assets/a101e162-14fa-4910-b789-43373332c8ed)
+![Screenshot 2025-04-24 at 1 52 32 AM](https://github.com/user-attachments/assets/0dd011f7-8768-4579-a997-606e1db69307)
+![Screenshot 2025-04-24 at 1 53 09 AM](https://github.com/user-attachments/assets/78628b99-4298-4f77-9388-6f989854da16)
+![Screenshot 2025-04-24 at 1 55 46 AM](https://github.com/user-attachments/assets/76f52804-ca6c-4566-942d-88b3ba77c428)
+![Screenshot 2025-04-24 at 1 55 55 AM](https://github.com/user-attachments/assets/577f887e-8617-49e2-a7c8-99bc68d52e5e)
+![Screenshot 2025-04-24 at 1 56 07 AM](https://github.com/user-attachments/assets/01652dac-8cc4-415d-8edb-0c080b909bd5)
+![Screenshot 2025-04-24 at 1 56 31 AM](https://github.com/user-attachments/assets/8291a7b1-6125-406f-baeb-b44d542e2fec)
+![Screenshot 2025-04-24 at 1 57 01 AM](https://github.com/user-attachments/assets/f7e57bef-fe62-4017-b9f2-5820545abb45)
+![Screenshot 2025-04-24 at 1 57 36 AM](https://github.com/user-attachments/assets/1347fca6-2a5a-4f66-bb52-449e6bff9313)
+![Screenshot 2025-04-24 at 1 57 53 AM](https://github.com/user-attachments/assets/6e098497-3d03-4bad-8fad-21ab6a2c0a37)
+![Screenshot 2025-04-24 at 1 58 10 AM](https://github.com/user-attachments/assets/0ba4d5a0-2d75-424d-82a6-98bf7327f5fd)
+![Screenshot 2025-04-24 at 1 58 24 AM](https://github.com/user-attachments/assets/77a0f889-588f-4a43-98e7-5b597eadb61d)
+![Screenshot 2025-04-24 at 2 00 52 AM](https://github.com/user-attachments/assets/be89c986-e8f8-458c-9cfd-e687de85cf2c)
+![Screenshot 2025-04-24 at 2 01 32 AM](https://github.com/user-attachments/assets/77013a74-2123-4b82-92b0-7d6ee6cbdaee)
 
